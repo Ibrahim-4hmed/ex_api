@@ -2,24 +2,14 @@ import sqlite3 from 'sqlite3'
 import { open } from 'sqlite'
 import path from 'node:path'
 
-export async function  createTable() {
+export async function  createTable(tablName) {
     const db = await open({
         filename: path.join('database.db'),
         driver: sqlite3.Database
     })
-
-    // "id": 1754567501000,
-    //   "from": "عنتيبي",
-    //   "fromCountry": "أوغندا",
-    //   "to": "بورتسودان",
-    //   "toCountry": "السودان",
-    //   "airline": "تاركو",
-    //   "duration": "2 ساعة 30 دقيقة",
-    //   "price": "$350",
-    //   "totalPrice": "المبلغ الكلي",
-    //   "bookBtn": "احجز الآن على واتساب"
+    
     await db.exec(`
-        CREATE TABLE IF NOT EXISTS flights (
+        CREATE TABLE IF NOT EXISTS ${tablName} (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             "from" TEXT NOT NULL,
             fromCountry TEXT NOT NULL,
@@ -29,11 +19,16 @@ export async function  createTable() {
             duration INTEGER,
             price INTEGER NOT NULL,
             totalPrice TEXT NOT NULL,
-            bookBtn TEXT NOT NULL
+            bookBtn TEXT 
         )
     `)
 
-    db.close()
+    await db.close()
+}
+async function main() {
+    await createTable("ar_flights")
+    await createTable("en_flights")
 }
 
-createTable()
+main()
+
